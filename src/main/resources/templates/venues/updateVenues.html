@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+
+<head>
+  <title>Update venue</title>
+</head>
+<body>
+
+	  <div layout:fragment="content">
+    <h1>Update Venue</h1>
+
+ 		<form th:action="@{/venues/updateVenues/{num}(num=${venue.id})}" th:object="${venue}" method="POST" name="updateform" onsubmit="return validation()">
+			
+			<label for="name">Name</label>
+			<input type="text" class="form-control" th:value="${venue.name}" id="name" name="name"  placeholder="Enter Name" />
+
+			<label for="address">Address</label>
+			<input type="text" class="form-control" th:value="${venue.address}" id="address" name="address" placeholder="Enter Address" />
+
+			<label for="postcode">Postcode</label>
+     		<input type="text" class="form-control" th:value="${venue.postcode}" id="postcode" name="postcode"  placeholder="Enter Postcode" />
+      		
+      		<label for="capacity">Capacity</label>
+      		<input type="int" class="form-control" th:value="${venue.capacity}" id="capacity" name="capacity"  placeholder="Enter Capacity" />
+
+
+			<button class="btn btn-primary" type="submit"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Submit</button>
+	  		<a class="btn btn-warning" role="button" href="/venues"><i class="fas fa-ban" aria-hidden="true"></i> Cancel</a>
+			
+		</form>
+	</div>
+
+</body>
+</html>
+	    
+<script>
+	function validation()
+	{
+		
+		if (document.forms["updateform"]["name"].value == ""  || document.forms["updateform"]["address"].value == "" || document.forms["updateform"]["capacity"].value == "" || document.forms["updateform"]["postcode"].value == "" || document.forms["updateform"]["name"].value.length >= 256 || document.forms["updateform"]["address"].value.length >= 300 || document.forms["updateform"]["capacity"].value.length <= 0   )
+		{
+			alert("Please check your inputs");
+			return false;
+		}
+		
+		
+		return true
+	}
+	
+</script>  
+	  

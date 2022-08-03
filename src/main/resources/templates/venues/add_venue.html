@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<head>
+  <title>All events</title>
+</head>
+<body>
+  <div layout:fragment="content">
+  	<h1>Add a new venue</h1>
+  	<form action="#" th:action="@{/venues/newVenue}" th:object="${venue}" method="post">
+    <div class="form-group">
+    	<p th:classappend="${#fields.hasErrors('name')}? has-error"></p>
+    	<label for="name"><i class="fas fa-person"></i> Venue Name</label>
+    	<input class="form-control" type="text" name="name" id="name" th:field = "*{name}" autofocus="autofocus" required/>
+    	<p class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">errors</p>
+        
+        <p th:classappend="${#fields.hasErrors('address')}? has-error"></p>
+        <br><label for="address"><i class="fas fa-text"></i> Address</label>
+        <textarea class="form-control" row ="3" type="text" name="address" id="address" th:field = "*{address}" autofocus="autofocus" required/>
+        <p class="text-danger" th:if="${#fields.hasErrors('address')}" th:errors="*{address}">errors</p>
+        
+        <p th:classappend="${#fields.hasErrors('postcode')}? has-error"></p>
+        <br><label for="postcode"><i class="fas fa-text"></i> Postcode</label>
+        <textarea class="form-control" row ="3" type="text" name="postcode" id="postcode" th:field = "*{postcode}" autofocus="autofocus" required/>
+        <p class="text-danger" th:if="${#fields.hasErrors('postcode')}" th:errors="*{postcode}">errors</p>
+        
+        <p th:classappend="${#fields.hasErrors('capacity')}? has-error"></p>
+        <br><label for="capacity"><i class="fas fa-number"></i> Capacity</label>
+        <textarea class="form-control" row ="3" type="number" name="capacity" id="capacity" th:field = "*{capacity}" autofocus="autofocus" required/>
+        <p class="text-danger" th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}">errors</p>
+    
+    </div>
+    <br> 
+      <button class="btn btn-primary" type="submit"><i class="fas fa-bookmark" aria-hidden="true"></i> Add Venue</button>
+      <a class="btn btn-warning" role="button" href="/venues"><i class="fas fa-ban" aria-hidden="true"></i> Cancel</a>
+    </form>
+    
+  	
+  </div>
+</body>
+</html>

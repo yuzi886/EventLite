@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/default}">
+<head>
+  <title>A Venue</title>
+</head>
+<body>
+  <div layout:fragment="content">
+
+    <blockquote>
+      <h1 th:text="${venue.name}">Name</h1>
+      <p th:text="${venue.address}">Date</p>
+      <p th:text="${venue.postcode}">Time</p>
+      <p th:text="${venue.capacity}">Description</p>
+    </blockquote>
+    
+    <h2> Events coming up...</h2>
+    
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th><i class="fas fa-bolt"></i> Event</th>
+          <th><i class="fas fa-map-marker-alt"></i> Venue</th>
+          <th><i class="fas fa-calendar"></i> Date</th>
+          <th><i class="fas fa-clock"></i> Time</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="e : ${events}">
+          <td> 
+          	<a th:href="@{/events/{num}(num=${e.id})}" th:text="${e.name}">My Event</a>
+          </td>	
+          
+          <td th:text="${{e.venue.name}}">Event Venue</td>
+          <td th:text="${#temporals.format(e.date, 'EEEE, dd MMMM yyyy')}">Event date</td>
+          <td th:text="${{e.time}}">Event time</td>
+          
+          
+        </tr>
+      </tbody>
+    </table>
+    
+    <form th:action="${(#mvc.url('VC#deleteVenue').arg(0, id)).build()}" th:method="delete">
+      <a class="btn btn-primary" role="button" th:href="@{/venues}"><i class="fas fa-arrow-left" aria-hidden="true"></i> Back</a>
+      <button type="submit" class="btn btn-danger" sec:authorize="isAuthenticated()"><i class="fas fa-trash" aria-hidden="true"></i> Delete</button>
+    </form>
+  </div>
+</body>
+</html>

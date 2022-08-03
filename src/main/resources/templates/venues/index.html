@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<head>
+  <title>All venues</title>
+</head>
+<body>
+  <div layout:fragment="content">
+    <h1>All venues</h1>
+    <form th:action="@{/venues}" method="GET" class="input-group">
+	  <input type="search" name = "keyword" th:value="${keyword}" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+	  <button type="submit" class="btn btn-outline-primary">search</button>
+	</form>
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th><i class="fas fa-bolt"></i> Name</th>
+          <th><i class="fas fa-location-arrow"></i> Address</th>
+          <th><i class="fas fa-map-marker-alt"></i> Postcode</th>
+          <th><i class="fas fa-warehouse"></i> Capacity</th>
+          <th sec:authorize="isAuthenticated()"><i class="fas fa-pen"></i> Update</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="v : ${venues}">
+          <td> 
+          	<a th:href="@{/venues/{num}(num=${v.id})}" th:text="${v.name}">Venues Name</a>
+          </td>
+          
+          <td th:text="${v.address}">Venues Address</td>
+          <td th:text="${v.postcode}">Venues Postcode</td>
+          <td th:text="${v.capacity}">Venues Capacity</td>
+          <td sec:authorize="isAuthenticated()">
+           <form th:action="@{/venues/updateVenues/{id}(id=${v.id})}" th:method="get">
+          		<button sec:authorize="isAuthenticated()" class="btn btn-primary"><i aria-hidden="true"></i> Update</button>
+          	</form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+	<div sec:authorize="isAuthenticated()">
+		<a href="/venues/add_venue"><i class="fas fa-plus"></i> New Venue</button></a>
+	</div>
+	<br>
+	<div>
+    	<a class="btn btn-primary" role="button" th:href="@{/}"><i class="fas fa-arrow-left" aria-hidden="true"></i> Back</a>
+    </div>
+	 
+  </div>
+    
+
+</body>
+</html>

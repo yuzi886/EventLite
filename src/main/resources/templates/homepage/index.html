@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<head>
+  <title>EventLite Home</title>
+</head>
+<body>
+  <div layout:fragment="content">
+    <h1>EventLite</h1>
+    <p>This is EventLite.</p>
+    
+    <h1>Upcoming events</h1>
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th><i class="fas fa-bolt"></i> Event</th>
+          <th><i class="fas fa-map-marker-alt"></i> Venue</th>
+          <th><i class="fas fa-calendar"></i> Date</th>
+          <th><i class="fas fa-clock"></i> Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="e, iterStat : ${events}" th:if="${iterStat.index} < 3">
+          <td> 
+            <a th:href="@{/events/{num}(num=${e.id})}" th:text="${e.name}">My Event</a>
+          </td>
+          <td> 
+          	<a th:href="@{/venues/{num}(num=${e.venue.id})}" th:text="${e.venue.name}">Event venue</a>
+          </td>
+          <td th:text="${#temporals.format(e.date, 'EEEE, dd MMMM yyyy')}">Event date</td>
+          <td th:text="${{e.time}}">Event time</td>
+        </tr>
+      </tbody>
+    </table>
+      
+    <p>View <a href="/events">list of events</a>.</p>
+    
+    
+    <h1>Popular venues</h1>
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th><i class="fas fa-bolt"></i> Venue</th>
+          <th><i class="fas fa-location-arrow"></i> Address</th>
+          <th><i class="fas fa-map-marker-alt"></i> Postcode</th>
+          <th><i class="fas fa-warehouse"></i> Capacity</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="v, iterStat : ${venues}" th:if="${iterStat.index} < 3">
+          <td> 
+          	<a th:href="@{/venues/{num}(num=${v.id})}" th:text="${v.name}">Venues Name</a>
+          </td>
+          <td th:text="${v.address}">Venues Address</td>
+          <td th:text="${v.postcode}">Venues Postcode</td>
+          <td th:text="${v.capacity}">Venues Capacity</td>
+        </tr>
+      </tbody>
+    </table>
+      
+    <p>View <a href="/venues">list of venues</a>.</p>
+    
+  </div>
+
+</body>
+</html>

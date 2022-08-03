@@ -1,0 +1,172 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<head>
+  <title>All events</title>
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <link th:href="@{https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css}" th:rel="stylesheet" />
+  <script th:src="@{https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.js}"></script>
+  <style>
+ 	#map{position: absolute; width: 60%; height: 30%}
+ 	.mapboxgl-popup {
+	  max-width: 200px;
+	}
+	
+	.mapboxgl-popup-content {
+	  text-align: center;
+	  font-family: 'Open Sans', sans-serif;
+	}
+  </style>
+</head>
+<body>
+  <div layout:fragment="content">
+    <h1>Events</h1>
+	<form th:action="@{/events}" method="GET" class="input-group">
+	  <input type="search" name = "keyword" th:value="${keyword}" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+	  <button type="submit" class="btn btn-outline-primary">search</button>
+	</form>
+	<h2>Upcoming events</h2>
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th><i class="fas fa-bolt"></i> Event</th>
+          <th><i class="fas fa-map-marker-alt"></i> Venue</th>
+          <th><i class="fas fa-calendar"></i> Date</th>
+          <th><i class="fas fa-clock"></i> Time</th>
+          <th sec:authorize="isAuthenticated()"><i class="fas fa-pen"></i> Update</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="e : ${events}">
+          <td> 
+          	<a th:href="@{/events/{num}(num=${e.id})}" th:text="${e.name}">My Event</a>
+          </td>
+          <td> 
+          	<a th:href="@{/venues/{num}(num=${e.venue.id})}" th:text="${e.venue.name}">Event venue</a>
+          </td>
+          <td th:text="${#temporals.format(e.date, 'EEEE, dd MMMM yyyy')}">Event date</td>
+          <td th:text="${{e.time}}">Event time</td>
+          <td sec:authorize="isAuthenticated()">
+          
+            <form th:action="@{/events/updateEvents/{id}(id=${e.id})}" th:method="get">
+          		<button sec:authorize="isAuthenticated()" class="btn btn-primary"><i aria-hidden="true"></i> Update</button>
+          	</form>
+                
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <h2>Previous events</h2>
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th><i class="fas fa-bolt"></i> Event</th>
+          <th><i class="fas fa-map-marker-alt"></i> Venue</th>
+          <th><i class="fas fa-calendar"></i> Date</th>
+          <th><i class="fas fa-clock"></i> Time</th>
+          <th sec:authorize="isAuthenticated()"><i class="fas fa-pen"></i> Update</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="e : ${preEvents}">
+          <td> 
+          	<a th:href="@{/events/{num}(num=${e.id})}" th:text="${e.name}">My Event</a>
+          </td>
+          <td> 
+          	<a th:href="@{/venues/{num}(num=${e.venue.id})}" th:text="${e.venue.name}">Event venue</a>
+          </td>
+          <td th:text="${#temporals.format(e.date, 'EEEE, dd MMMM yyyy')}">Event date</td>
+          <td th:text="${{e.time}}">Event time</td>
+          <td sec:authorize="isAuthenticated()">
+          
+            <form th:action="@{/events/updateEvents/{id}(id=${e.id})}" th:method="get">
+          		<button sec:authorize="isAuthenticated()" class="btn btn-primary"><i aria-hidden="true"></i> Update</button>
+          	</form>
+                
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+	<div sec:authorize="isAuthenticated()">
+	  <a href="/events/add_event"><i class="fas fa-plus"></i> New Event</button></a>
+    </div>
+    <br>
+    <div>
+    	<a class="btn btn-primary" role="button" th:href="@{/}"><i class="fas fa-arrow-left" aria-hidden="true"></i> Back</a>
+    </div>
+    
+    <h2>Twitter feed</h2>
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th><i class="fas fa-calendar"></i> Date</th>
+          <th><i class="fab fa-twitter"></i> Tweet</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="t: ${timeline}">
+          <td> 
+          	<a th:text="${t.createdAt}">Date</a>
+          </td>
+          <td> 
+          	<a th:href="${'https://twitter.com/' + {t.getUser().getId()} + '/status/' + {t.getId()}}" th:text="${t.text}">Tweet</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <div id="map"></div>
+    
+	<script th:inline="javascript" type="text/javascript">
+	/*[+
+	
+	mapboxgl.accessToken = 'pk.eyJ1Ijoia2VsbHltYW5jaGVzdGVyIiwiYSI6ImNsMTZhbXVobTA1aWQzZHBraGE2ZHl0c2sifQ.nagdXpdlycqcUQHam-7l7w';
+	const map = new mapboxgl.Map({
+	container: 'map',
+	style: 'mapbox://styles/mapbox/streets-v11',
+	center: [-2.2426, 53.4808],
+	zoom: 5
+	});
+	var long_lat_pair = [];
+	var eventinfo = [];
+    +]*/
+    /*[# th:each="e : ${events}"]*/
+    	/*[+
+    	var lat = /*[[${e.venue.latitude}]]*/;
+    	var long = /*[[${e.venue.longitude}]]*/;
+    	var text = /*[[${e.name}]]*/;
+    	var time = /*[[${e.time}]]*/;
+    	var pair = [long,lat];
+    	var found = false;
+    	for(var i=0;i<long_lat_pair.length;i++){
+    		console.log(JSON.stringify(long_lat_pair[i])==JSON.stringify([long,lat]));
+    		if (JSON.stringify(long_lat_pair[i])==JSON.stringify([long,lat])){
+    			console.log(eventinfo);
+    			eventinfo[i]=eventinfo[i]+",\n"+text+" "+ time+"\n";
+    			console.log(eventinfo);
+    			found=true;
+    		}
+    	}
+    	if (found==false){
+    		long_lat_pair.push(pair);
+    		eventinfo.push("\n"+text+" "+time+"\n");
+    	}
+    	
+        +]*/
+    /*[/]*/
+    /*[+
+    	console.log(long_lat_pair);
+    	console.log(eventinfo);
+    	for(var i=0;i<long_lat_pair.length;i++){
+    		var popup = new mapboxgl.Popup({closeButton: false, closeOnClick: true, maxWidth: "auto"}).setText(eventinfo[i]);
+        	var l = new mapboxgl.Marker({ color: 'black'}).setLngLat(long_lat_pair[i]).setPopup(popup).addTo(map);
+    	}
+    +]*/
+    </script>
+ </div>
+
+</body>
+</html>

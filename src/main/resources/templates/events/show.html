@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/default}">
+<head>
+  <title>An Event</title>
+	<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <link th:href="@{https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css}" th:rel="stylesheet" />
+  <script th:src="@{https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.js}"></script>
+  <style>
+ 	#map{position: absolute; width: 60%; height: 30%}
+ 	.mapboxgl-popup {
+	  max-width: 200px;
+	}
+	
+	.mapboxgl-popup-content {
+	  text-align: center;
+	  font-family: 'Open Sans', sans-serif;
+	}
+  </style>
+</head>
+<body>
+  <div layout:fragment="content">
+
+    <blockquote>
+      <h1 th:text="${event.name}">Event</h1>
+      <p th:text="${#temporals.format(event.date, 'EEEE, dd MMMM yyyy')}">Date</p>
+      <p th:text="${event.time}">Time</p>
+      
+      <p> 
+      	<a th:href="@{/venues/{num}(num=${event.venue.id})}" th:text="${event.venue.name}">Venue</a>
+      </p>
+      
+      <p th:text="${event.description}">Description</p>
+    </blockquote>
+    
+    <form th:action="${(#mvc.url('EC#deleteEvent').arg(0, id)).build()}" th:method="delete">
+      <a class="btn btn-primary" role="button" th:href="@{/events}"><i class="fas fa-arrow-left" aria-hidden="true"></i> Back</a>
+      <button type="submit" class="btn btn-danger" sec:authorize="isAuthenticated()"><i class="fas fa-trash" aria-hidden="true"></i> Delete</button>
+    </form>
+    
+    <h2>Share the event!</h2>
+    <form th:action="@{/events/{id}(id =${event.id})}" method="POST" class="post-twitter">
+	  <input type="text" name = "tweet" th:value="${tweet}" th:placeholder="${event.name}" />
+	  <button type="submit" class="btn btn-outline-primary">Send Tweet</button>
+	</form>
+	
+    <div id="map"></div>
+	<script th:inline="javascript" type="text/javascript">
+	/*[+
+	var long = /*[[${event.venue.longitude}]]*/;
+	var lat = /*[[${event.venue.latitude}]]*/;
+	mapboxgl.accessToken = 'pk.eyJ1Ijoia2VsbHltYW5jaGVzdGVyIiwiYSI6ImNsMTZhbXVobTA1aWQzZHBraGE2ZHl0c2sifQ.nagdXpdlycqcUQHam-7l7w';
+	const map = new mapboxgl.Map({
+	container: 'map',
+	style: 'mapbox://styles/mapbox/streets-v11',
+	center: [long, lat],
+	zoom: 12
+	});
+    +]*/
+    
+	/*[+
+	var text = /*[[${event.name}]]*/;
+	var time = /*[[${event.time}]]*/;
+	var popup = new mapboxgl.Popup({closeButton: false, closeOnClick: true, maxWidth: "auto"}).setText(text+" "+ time);
+    var l = new mapboxgl.Marker({ color: 'black'}).setLngLat([long,lat]).setPopup(popup).addTo(map);
+    +]*/
+    
+    </script>
+  </div>
+  
+</body>
+</html>

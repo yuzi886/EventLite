@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<head>
+  <title>Edit Event</title>
+</head>
+<body>
+  <div layout:fragment="content">
+    <h1>Edit Event</h1>
+	<form th:action="@{/events/updateEvents/{num}(num=${event.id})}" th:object="${event}" method="post" name="updateform" onsubmit="return validation()">
+	  
+	      <label for="name">Name</label>
+	      <input class="form-control" type="text" name="name" id="ename" autofocus="autofocus" th:value="${event.name}"/>
+	    
+	      <label for="date">Date</label>
+	      <input class="form-control" type="date" name="date" id="date" autofocus="autofocus" th:value="${event.date}"/>
+	    
+	      <label for="time">Time</label>
+	      <input class="form-control" type="time" name="time" id="time" autofocus="autofocus" th:value="${event.time}"/>
+	    
+	      <label for="description">Description</label>
+	      <input class="form-control" type="description" name="description" id="description" autofocus="autofocus" th:value="${event.description}"/>
+	      
+	  		<label for="venue">Venue</label>
+	  	 	<select class="form-control" name="venue">
+			    <option th:each="v : ${venues}" th:value="${v.id}" th:text="${v.name}" th:selected="${v.id==event.venue.id}">
+			    </option>
+			</select>
+	    
+	  <button class="btn btn-primary" type="submit"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Submit</button>
+	  <a class="btn btn-warning" role="button" href="/events"><i class="fas fa-ban" aria-hidden="true"></i> Cancel</a>
+	  
+<script>
+
+	var date = new Date();
+	date.setDate(date.getDate() + 1);
+	date = date.toISOString().split('T')[0];
+	document.getElementsByName("date")[0].setAttribute('min', date);
+	
+</script>	    
+<script>
+	function validation()
+	{
+		
+		if (document.forms["updateform"]["name"].value == "" || document.forms["updateform"]["name"].value.length > 256 || document.forms["updateform"]["date"].value == ""  )
+		{
+			alert("Please input a value for name or date or check the length");
+			return false;
+		}
+		
+		
+		return true
+	}
+	
+</script>  
+	  
+	</form>
+  </div>
+
+</body>
+</html>
