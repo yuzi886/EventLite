@@ -4,7 +4,7 @@
 
 *This is the skeleton lab code for the team-based exercise.*
 
-See the instructions in Blackboard for more details.
+This is the backup project from the gitlab
 
 #### Licence
 
